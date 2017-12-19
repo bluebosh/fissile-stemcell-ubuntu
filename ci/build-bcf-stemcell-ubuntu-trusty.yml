@@ -1,0 +1,105 @@
+jobs:
+  - name: build-bcf-base-image-ubuntu-trusty
+    plan:
+      - get: s3.ubuntu-trusty-os-image
+        trigger: false
+      - get: bosh-linux-stemcell-builder
+        trigger: true
+      - get: semver.os-image-ubuntu
+      - put: docker.ubuntu-os-image
+        params:
+          #tag_prefix: "trusty-"
+          tag: semver.os-image-ubuntu/bcf-os-image-ubuntu-trusty-version
+          import_file: s3.ubuntu-trusty-os-image/bosh-ubuntu-trusty-os-image.tgz
+          tag_as_latest: true
+        get_params:
+          skip_download: true
+
+  - name: build-bcf-stemcell-ubuntu-trusty
+    plan:
+      - aggregate:
+        - get: git.fissile-stemcell-ubuntu
+          passed:
+            - build-bcf-base-image-ubuntu-trusty
+        - get: docker.ubuntu-os-image
+          trigger: true
+          passed:
+            - build-os-image-ubuntu-trusty
+        - get: semver.bcf-stemcell-ubuntu-trusty
+          params:
+            bump: major
+      - task: setup-ubuntu-stemcell-versions
+        file: git.fissile-stemcell-ubuntu/ci/tasks/setup-ubuntu-stemcell-versions.yml
+        input_mapping:
+          src: git.fissile-stemcell-ubuntu
+        params:
+          DOCKER_REPOSITORY: os-image-ubuntu
+      - put: docker.bcf-stemcell-ubuntu-trusty
+        params:
+          build: git.fissile-stemcell-ubuntu
+          tag: semver.bcf-stemcell-ubuntu-trusty/bcf-stemcell-ubuntu-trusty-version
+        get_params:
+          skip_download: true
+
+resources:
+  - name: s3.ubuntu-trusty-os-image
+    type: s3
+    source:
+      bucket: bosh-os-images
+      #versioned_file: bosh-ubuntu-trusty-os-image.tgz
+      regexp: bosh-ubuntu-trusty-(.*)-image.tgz
+      access_key_id: {{aws-access-key}}
+      secret_access_key: {{aws-secret-key}}
+
+  - name: docker.ubuntu-os-image
+    type: docker-image
+    source:
+      repository: bluebosh/bcf-base-image-ubuntu-trusty
+      tag: trusty
+      username: {{docker-username}}
+      password: {{docker-password}}
+
+  - name: docker.bcf-stemcell-ubuntu-trusty
+    type: docker-image
+    source:
+      repository: bluebosh/bcf-stemcell-ubuntu-trusty
+      tag: trusty
+      username: {{docker-username}}
+      password: {{docker-password}}
+
+  - name: bosh-linux-stemcell-builder
+    type: git
+    source:
+      uri: https://github.com/cloudfoundry/bosh-linux-stemcell-builder
+      branch: master
+      paths:
+      - bosh-stemcell/os_image_versions.json
+
+  - name: git.fissile-stemcell-ubuntu
+    type: git
+    source:
+      uri: https://github.com/bluebosh/fissile-stemcell-ubuntu.git
+      branch: bcf
+      private_key: {{github-private-key}}
+
+  - name: semver.os-image-ubuntu
+    type: semver
+    source:
+      driver: s3
+      key: bcf-os-image-ubuntu-trusty-version
+      bucket: bcf-stemcell-ubuntu-trusty
+      access_key_id: {{stemcell-sl-os-access-key}}
+      secret_access_key: {{stemcell-sl-os-secret-key}}
+      endpoint: {{stemcell-sl-os-endpoint}}
+      initial_version: 0.0.0
+
+  - name: semver.bcf-stemcell-ubuntu-trusty
+    type: semver
+    source:
+      driver: s3
+      key: bcf-stemcell-ubuntu-trusty-version
+      bucket: bcf-stemcell-ubuntu-trusty
+      access_key_id: {{stemcell-sl-os-access-key}}
+      secret_access_key: {{stemcell-sl-os-secret-key}}
+      endpoint: {{stemcell-sl-os-endpoint}}
+      initial_version: 0.0.0
