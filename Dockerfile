@@ -1,4 +1,5 @@
-FROM splatform/os-image-ubuntu:trusty
+ARG BASE_IMAGE
+FROM ${BASE_IMAGE}
 
 # Install RVM & Ruby 2.3.1
 RUN gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 \
@@ -7,18 +8,27 @@ RUN gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A170311380
         && echo "source /usr/local/rvm/scripts/rvm" >> ~/.bashrc
 
 # Install dumb-init
-RUN wget https://github.com/Yelp/dumb-init/releases/download/v1.1.3/dumb-init_1.1.3_amd64.deb && \
-	echo '34995cf69c88311e9475b4d101186b1d5f4d653f222e41c6e5643ff4e6f56f54 *dumb-init_1.1.3_amd64.deb' | sha256sum --check && \
-	dpkg -i dumb-init_*.deb && \
-	rm -f dumb-init_*.deb
+ARG DUMB_INIT_VER=1.2.1
+RUN curl -L "https://github.com/Yelp/dumb-init/releases/download/v${DUMB_INIT_VER}/dumb-init_${DUMB_INIT_VER}_amd64" -o /usr/bin/dumb-init && chmod a+x /usr/bin/dumb-init
+
+# Install jq
+RUN curl -L "https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64" -o /usr/local/bin/jq && chmod a+x /usr/local/bin/jq
 
 # Install configgin
-RUN /bin/bash -c "source /usr/local/rvm/scripts/rvm && gem install configgin"
+ARG CONFIGGIN_VER=0.14.0
+RUN /bin/bash -c "source /usr/local/rvm/scripts/rvm && gem install configgin ${CONFIGGIN_VER:+--version=${CONFIGGIN_VER}}"
+
+# Configure logrotate
+RUN /bin/bash -c "mv /etc/cron.daily/logrotate /usr/bin/logrotate-cron && echo '0,15,30,45 * * * * root /usr/bin/logrotate-cron' > /etc/cron.d/logrotate"
 
 # Add additional configuration and scripts
-ADD monitrc.erb /opt/hcf/monitrc.erb
+ADD monitrc.erb /opt/fissile/monitrc.erb
 
-ADD post-start.sh /opt/hcf/post-start.sh
-RUN chmod ug+x /opt/hcf/post-start.sh
+ADD post-start.sh /opt/fissile/post-start.sh
+RUN chmod ug+x /opt/fissile/post-start.sh
 
 ADD rsyslog_conf/etc /etc/
+
+# Generate stemcell version file /etc/stemcell_version
+ARG UBUNTU_VER
+RUN curl -L "https://bcf-stemcell-ubuntu.s3.amazonaws.com/bcf-stemcell-ubuntu-${UBUNTU_VER}-version" -o /etc/stemcell_version

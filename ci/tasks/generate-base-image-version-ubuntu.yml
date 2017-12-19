@@ -1,0 +1,24 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: bluebosh/docker-git
+
+inputs:
+- name: s3.base-image-ubuntu
+- name: git.bosh-linux-stemcell-builder
+- name: git.fissile-stemcell-ubuntu
+
+outputs:
+- name: s3.bcf-base-image-ubuntu-version
+
+run:
+  path: git.fissile-stemcell-ubuntu/ci/tasks/generate-base-image-version-ubuntu.sh
+
+params:
+  DOCKER_USER:   replace-me
+  DOCKER_PASS:   replace-me
+  DOCKER_REPO:   replace-me
+  UBUNTU_REL:    replace-me

@@ -1,0 +1,21 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: bluebosh/docker-git
+
+inputs:
+- name: git.fissile-stemcell-ubuntu
+- name: s3.bcf-base-image-ubuntu-xenial-version
+- name: docker.base-image-ubuntu-xenial
+
+outputs:
+- name: s3.bcf-stemcell-ubuntu-xenial-version
+
+run:
+  path: git.fissile-stemcell-ubuntu/ci/tasks/generate-stemcell-version-ubuntu.sh
+
+params:
+  UBUNTU_REL:    replace-me

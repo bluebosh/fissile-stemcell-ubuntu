@@ -2,7 +2,7 @@
  check process crond with pidfile /var/run/crond.pid
    group system
    group crond
-   start program = "/bin/sh -x -c 'echo $$ > /var/run/crond.pid ; exec cron -f'"
+   start program = "/bin/sh -x -c 'echo $$ > /var/run/crond.pid ; exec cron -n'"
    stop  program = "/bin/sh -x -c 'kill -TERM $(cat /var/run/crond.pid)'"
    if 5 restarts with 5 cycles then timeout
    depend cron_bin

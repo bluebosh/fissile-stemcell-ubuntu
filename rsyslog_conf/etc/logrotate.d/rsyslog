@@ -1,6 +1,7 @@
 /var/log/syslog
 {
 	rotate 7
+	daily
 	maxsize=10M
 	minsize=9M
 	missingok
@@ -24,6 +25,7 @@
 /var/log/messages
 {
 	rotate 4
+	daily
 	maxsize=10M
 	minsize=9M
 	missingok

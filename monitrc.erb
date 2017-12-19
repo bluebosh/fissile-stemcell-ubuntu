@@ -14,7 +14,6 @@ include /etc/monit/monitrc.d/cron
 include /etc/monit/monitrc.d/rsyslog
 
 include /var/vcap/monit/*.monitrc
-include /var/vcap/monit/job/*.monitrc
 
 # Standard fissile job to handle post-start scripts.  Currently the
 # start command does its own dependency checking to work around issues
@@ -24,4 +23,4 @@ include /var/vcap/monit/job/*.monitrc
 # by run.sh (As a post-start.monitrc file in the standard place).
 
 check file post-start path /var/vcap/monit/ready
-  start program = "/opt/hcf/post-start.sh"
+  start program = "/opt/fissile/post-start.sh"
