@@ -63,12 +63,8 @@ jobs:
       - aggregate:
         - get: git.fissile-stemcell-ubuntu
         - get: s3.bcf-base-image-ubuntu-trusty-version
-        - get: docker.base-image-ubuntu-trusty
-          params:
-            skip_download: true
-          trigger: true
       - task: generate-stemcell-version-ubuntu-trusty
-        file: git.fissile-stemcell-ubuntu/ci/tasks/generate-stemcell-version-ubuntu-trusty.yml
+        file: git.fissile-stemcell-ubuntu/ci/tasks/generate-stemcell-version-ubuntu.yml
         input_mapping:
           s3.bcf-base-image-ubuntu-version: s3.bcf-base-image-ubuntu-trusty-version
         output_mapping:
@@ -100,12 +96,8 @@ jobs:
       - aggregate:
         - get: git.fissile-stemcell-ubuntu
         - get: s3.bcf-base-image-ubuntu-xenial-version
-        - get: docker.base-image-ubuntu-xenial
-          params:
-            skip_download: true
-          trigger: true
       - task: generate-stemcell-version-ubuntu-xenial
-        file: git.fissile-stemcell-ubuntu/ci/tasks/generate-stemcell-version-ubuntu-xenial.yml
+        file: git.fissile-stemcell-ubuntu/ci/tasks/generate-stemcell-version-ubuntu.yml
         input_mapping:
           s3.bcf-base-image-ubuntu-version: s3.bcf-base-image-ubuntu-xenial-version
         output_mapping:

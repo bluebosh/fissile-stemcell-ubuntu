@@ -8,11 +8,10 @@ image_resource:
 
 inputs:
 - name: git.fissile-stemcell-ubuntu
-- name: s3.bcf-base-image-ubuntu-xenial-version
-- name: docker.base-image-ubuntu-xenial
+- name: s3.bcf-base-image-ubuntu-version
 
 outputs:
-- name: s3.bcf-stemcell-ubuntu-xenial-version
+- name: s3.bcf-stemcell-ubuntu-version
 
 run:
   path: git.fissile-stemcell-ubuntu/ci/tasks/generate-stemcell-version-ubuntu.sh
