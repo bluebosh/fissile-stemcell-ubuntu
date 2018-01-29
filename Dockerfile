@@ -15,6 +15,9 @@ RUN curl -L "https://github.com/Yelp/dumb-init/releases/download/v${DUMB_INIT_VE
 ARG CONFIGGIN_VER=0.14.0
 RUN /bin/bash -c "source /usr/local/rvm/scripts/rvm && gem install configgin ${CONFIGGIN_VER:+--version=${CONFIGGIN_VER}}"
 
+# Install Python.
+RUN apt-get update && apt-get install -y python python-dev python-pip python-virtualenv
+
 # Configure logrotate
 RUN /bin/bash -c "mv /etc/cron.daily/logrotate /usr/bin/logrotate-cron && echo '0,15,30,45 * * * * root /usr/bin/logrotate-cron' > /etc/cron.d/logrotate"
 
