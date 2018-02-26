@@ -1,5 +1,4 @@
 jobs:
-
   - name: build-bcf-base-image-ubuntu-trusty
     plan:
       - aggregate:
@@ -86,7 +85,7 @@ jobs:
           build_args:
             BASE_IMAGE: bluebosh/bcf-base-image-ubuntu-trusty:latest
             DUMB_INIT_VER: 1.2.1
-            CONFIGGIN_VER: 0.14.0
+            CONFIGGIN_VER: 0.14.1
             UBUNTU_VER: trusty
         get_params:
           skip_download: true
