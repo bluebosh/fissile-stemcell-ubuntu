@@ -2,7 +2,7 @@ ARG BASE_IMAGE
 FROM ${BASE_IMAGE}
 
 # Install RVM & Ruby 2.3.1
-RUN gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 \
+RUN gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB\
         && curl -sSL https://raw.githubusercontent.com/rvm/rvm/stable/binscripts/rvm-installer | bash -s stable --ruby=2.3.5 \
         && /bin/bash -c "source /usr/local/rvm/scripts/rvm && gem install bundler '--version=1.11.2' --no-format-executable" \
         && echo "source /usr/local/rvm/scripts/rvm" >> ~/.bashrc
@@ -12,7 +12,7 @@ ARG DUMB_INIT_VER=1.2.1
 RUN curl -L "https://github.com/Yelp/dumb-init/releases/download/v${DUMB_INIT_VER}/dumb-init_${DUMB_INIT_VER}_amd64" -o /usr/bin/dumb-init && chmod a+x /usr/bin/dumb-init
 
 # Install configgin
-ARG CONFIGGIN_VER=0.14.1
+ARG CONFIGGIN_VER=0.15.0
 RUN /bin/bash -c "source /usr/local/rvm/scripts/rvm && gem install configgin ${CONFIGGIN_VER:+--version=${CONFIGGIN_VER}}"
 
 # Install Python.
