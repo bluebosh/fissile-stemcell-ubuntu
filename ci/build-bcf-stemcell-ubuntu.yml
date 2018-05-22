@@ -174,7 +174,7 @@ resources:
       uri: https://github.com/cloudfoundry/bosh-linux-stemcell-builder
       branch: master
       paths:
-      - bosh-stemcell/os_image_versions.json
+      - bosh-stemcell/image-metalinks/*
 
   - name: git.fissile-stemcell-ubuntu
     type: git
@@ -182,9 +182,6 @@ resources:
       uri: https://github.com/bluebosh/fissile-stemcell-ubuntu.git
       branch: bcf
       private_key: {{github-private-key}}
-      ignore_paths:
-      - ci/*
-      - ci/tasks/*
 
   - name: s3.bcf-base-image-ubuntu-trusty-version
     type: s3

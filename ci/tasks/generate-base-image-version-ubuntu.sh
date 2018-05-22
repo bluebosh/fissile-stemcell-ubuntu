@@ -5,7 +5,7 @@ set -x
 output_dir="s3.bcf-base-image-ubuntu-version"
 mkdir -p ${output_dir}
 
-BASE_IMAGE_VERSION=`cat git.bosh-linux-stemcell-builder/bosh-stemcell/ubuntu-${UBUNTU_REL}.meta4 | grep -o -P '(?<=versionId=).*(?=\/url>)'`
+BASE_IMAGE_VERSION=`cat git.bosh-linux-stemcell-builder/bosh-stemcell/image-metalinks/ubuntu-${UBUNTU_REL}.meta4 | grep -E "<url>|versionId=" | sed -e "s/.*versionId=//;s/<\/url>.*//"`
 BASE_IMAGE_VERSION_SHORT=${BASE_IMAGE_VERSION:1:7}
 
 # Check if the given base image with specific tag already exists

@@ -15,7 +15,12 @@ popd
 STEMCELL_VERSION=${BASE_IMAGE_VERSION_SHORT}-${GIT_COMMIT_STEMCELL_SHORT}
 
 # Check if the given stemcell image with specific tag already exists
+set -e
+JQ_VERSION="1.5"
+curl -L "https://github.com/stedolan/jq/releases/download/jq-${JQ_VERSION}/jq-linux64" -o /usr/local/bin/jq
+chmod a+x /usr/local/bin/jq
 TOKEN=$( curl -sSLd "username=${DOCKER_USER}&password=${DOCKER_PASS}" https://hub.docker.com/v2/users/login | jq -r ".token" )
+set +e
 curl -sH "Authorization: JWT $TOKEN" "https://hub.docker.com/v2/repositories/${DOCKER_REPO}/tags/${STEMCELL_VERSION}/" | grep "Not found"
 
 if [ $? -ne 0 ]; then
