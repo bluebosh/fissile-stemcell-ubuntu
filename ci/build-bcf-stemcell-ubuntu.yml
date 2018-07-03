@@ -85,7 +85,7 @@ jobs:
           build_args:
             BASE_IMAGE: bluebosh/bcf-base-image-ubuntu-trusty:latest
             DUMB_INIT_VER: 1.2.1
-            CONFIGGIN_VER: 0.15.1
+            CONFIGGIN_VER: 0.16.1
             UBUNTU_VER: trusty
         get_params:
           skip_download: true
@@ -118,7 +118,7 @@ jobs:
           build_args:
             BASE_IMAGE: bluebosh/bcf-base-image-ubuntu-xenial:latest
             DUMB_INIT_VER: 1.2.1
-            CONFIGGIN_VER: 0.15.1
+            CONFIGGIN_VER: 0.16.1
             UBUNTU_VER: xenial
         get_params:
           skip_download: true
