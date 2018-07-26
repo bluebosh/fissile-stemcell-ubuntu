@@ -85,7 +85,7 @@ jobs:
           build_args:
             BASE_IMAGE: bluebosh/bcf-base-image-ubuntu-trusty:latest
             DUMB_INIT_VER: 1.2.1
-            CONFIGGIN_VER: 0.16.1
+            CONFIGGIN_VER: 0.15.2
             UBUNTU_VER: trusty
         get_params:
           skip_download: true
@@ -114,11 +114,11 @@ jobs:
         params:
           build: git.fissile-stemcell-ubuntu
           tag: s3.bcf-stemcell-ubuntu-xenial-version/bcf-stemcell-ubuntu-xenial-version
-          tag_as_latest: true
+          tag_as_latest: false
           build_args:
             BASE_IMAGE: bluebosh/bcf-base-image-ubuntu-xenial:latest
             DUMB_INIT_VER: 1.2.1
-            CONFIGGIN_VER: 0.16.1
+            CONFIGGIN_VER: 0.15.2
             UBUNTU_VER: xenial
         get_params:
           skip_download: true
