@@ -21,7 +21,7 @@ curl -L "https://github.com/stedolan/jq/releases/download/jq-${JQ_VERSION}/jq-li
 chmod a+x /usr/local/bin/jq
 TOKEN=$( curl -sSLd "username=${DOCKER_USER}&password=${DOCKER_PASS}" https://hub.docker.com/v2/users/login | jq -r ".token" )
 set +e
-curl -sH "Authorization: JWT $TOKEN" "https://hub.docker.com/v2/repositories/${DOCKER_REPO}/tags/${STEMCELL_VERSION}/" | grep "Not found"
+curl -sHk "https://hub.docker.com/v2/repositories/${DOCKER_REPO}/tags/${STEMCELL_VERSION}/" | grep "Not found"
 
 if [ $? -ne 0 ]; then
     echo "The bcf-stemcell with tag ${STEMCELL_VERSION} already exists, ignore image creation."

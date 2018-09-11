@@ -84,8 +84,6 @@ jobs:
           tag_as_latest: true
           build_args:
             BASE_IMAGE: bluebosh/bcf-base-image-ubuntu-trusty:latest
-            DUMB_INIT_VER: 1.2.1
-            CONFIGGIN_VER: 0.16.2
             UBUNTU_VER: trusty
         get_params:
           skip_download: true
@@ -117,8 +115,6 @@ jobs:
           tag_as_latest: false
           build_args:
             BASE_IMAGE: bluebosh/bcf-base-image-ubuntu-xenial:latest
-            DUMB_INIT_VER: 1.2.1
-            CONFIGGIN_VER: 0.15.2
             UBUNTU_VER: xenial
         get_params:
           skip_download: true
@@ -181,7 +177,6 @@ resources:
     source:
       uri: https://github.com/bluebosh/fissile-stemcell-ubuntu.git
       branch: bcf
-      private_key: {{github-private-key}}
 
   - name: s3.bcf-base-image-ubuntu-trusty-version
     type: s3
