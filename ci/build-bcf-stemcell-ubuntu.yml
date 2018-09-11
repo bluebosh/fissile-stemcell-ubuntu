@@ -85,7 +85,7 @@ jobs:
           build_args:
             BASE_IMAGE: bluebosh/bcf-base-image-ubuntu-trusty:latest
             DUMB_INIT_VER: 1.2.1
-            CONFIGGIN_VER: 0.15.2
+            CONFIGGIN_VER: 0.16.2
             UBUNTU_VER: trusty
         get_params:
           skip_download: true
@@ -213,4 +213,4 @@ resources:
       bucket: bcf-stemcell-ubuntu
       versioned_file: bcf-stemcell-ubuntu-xenial-version
       access_key_id: {{aws-access-key}}
-      secret_access_key: {{aws-secret-key}}      
+      secret_access_key: {{aws-secret-key}}
