@@ -1,37 +1,9 @@
 jobs:
-  - name: build-bcf-base-image-ubuntu-trusty
-    plan:
-      - aggregate:
-        - get: s3.base-image-ubuntu-trusty
-        - get: git.bosh-linux-stemcell-builder
-        - get: git.fissile-stemcell-ubuntu
-      - task: generate-base-image-version-ubuntu-trusty
-        file: git.fissile-stemcell-ubuntu/ci/tasks/generate-base-image-version-ubuntu.yml
-        input_mapping:
-          s3.base-image-ubuntu: s3.base-image-ubuntu-trusty
-        output_mapping:
-          s3.bcf-base-image-ubuntu-version: s3.bcf-base-image-ubuntu-trusty-version
-        params:
-          DOCKER_USER: {{docker-username}}
-          DOCKER_PASS: {{docker-password}}
-          DOCKER_REPO: bluebosh/bcf-base-image-ubuntu-trusty
-          UBUNTU_REL: trusty
-      - put: s3.bcf-base-image-ubuntu-trusty-version
-        params:
-          file: s3.bcf-base-image-ubuntu-trusty-version/bcf-base-image-ubuntu-trusty-version
-          acl: public-read
-      - put: docker.base-image-ubuntu-trusty
-        params:
-          tag: s3.bcf-base-image-ubuntu-trusty-version/bcf-base-image-ubuntu-trusty-version
-          import_file: s3.base-image-ubuntu-trusty/bosh-ubuntu-trusty-os-image.tgz
-          tag_as_latest: true
-        get_params:
-          skip_download: true
-
   - name: build-bcf-base-image-ubuntu-xenial
     plan:
       - aggregate:
         - get: s3.base-image-ubuntu-xenial
+          trigger: true
         - get: git.bosh-linux-stemcell-builder
         - get: git.fissile-stemcell-ubuntu
       - task: generate-base-image-version-ubuntu-xenial
@@ -57,42 +29,12 @@ jobs:
         get_params:
           skip_download: true
 
-  - name: build-bcf-stemcell-ubuntu-trusty
-    plan:
-      - aggregate:
-        - get: git.fissile-stemcell-ubuntu
-        - get: s3.bcf-base-image-ubuntu-trusty-version
-      - task: generate-stemcell-version-ubuntu-trusty
-        file: git.fissile-stemcell-ubuntu/ci/tasks/generate-stemcell-version-ubuntu.yml
-        input_mapping:
-          s3.bcf-base-image-ubuntu-version: s3.bcf-base-image-ubuntu-trusty-version
-        output_mapping:
-          s3.bcf-stemcell-ubuntu-version: s3.bcf-stemcell-ubuntu-trusty-version
-        params:
-          DOCKER_USER: {{docker-username}}
-          DOCKER_PASS: {{docker-password}}
-          DOCKER_REPO: bluebosh/bcf-stemcell-ubuntu-trusty
-          UBUNTU_REL: trusty
-      - put: s3.bcf-stemcell-ubuntu-trusty-version
-        params:
-          file: s3.bcf-stemcell-ubuntu-trusty-version/bcf-stemcell-ubuntu-trusty-version
-          acl: public-read
-      - put: docker.bcf-stemcell-ubuntu-trusty
-        params:
-          build: git.fissile-stemcell-ubuntu
-          tag: s3.bcf-stemcell-ubuntu-trusty-version/bcf-stemcell-ubuntu-trusty-version
-          tag_as_latest: true
-          build_args:
-            BASE_IMAGE: bluebosh/bcf-base-image-ubuntu-trusty:latest
-            UBUNTU_VER: trusty
-        get_params:
-          skip_download: true
-
   - name: build-bcf-stemcell-ubuntu-xenial
     plan:
       - aggregate:
         - get: git.fissile-stemcell-ubuntu
         - get: s3.bcf-base-image-ubuntu-xenial-version
+          trigger: true
       - task: generate-stemcell-version-ubuntu-xenial
         file: git.fissile-stemcell-ubuntu/ci/tasks/generate-stemcell-version-ubuntu.yml
         input_mapping:
@@ -120,14 +62,6 @@ jobs:
           skip_download: true
 
 resources:
-  - name: s3.base-image-ubuntu-trusty
-    type: s3
-    source:
-      bucket: bosh-os-images
-      regexp: bosh-ubuntu-trusty-(.*)-image.tgz
-      access_key_id: {{aws-access-key}}
-      secret_access_key: {{aws-secret-key}}
-
   - name: s3.base-image-ubuntu-xenial
     type: s3
     source:
@@ -136,24 +70,10 @@ resources:
       access_key_id: {{aws-access-key}}
       secret_access_key: {{aws-secret-key}}
 
-  - name: docker.base-image-ubuntu-trusty
-    type: docker-image
-    source:
-      repository: bluebosh/bcf-base-image-ubuntu-trusty
-      username: {{docker-username}}
-      password: {{docker-password}}
-
   - name: docker.base-image-ubuntu-xenial
     type: docker-image
     source:
       repository: bluebosh/bcf-base-image-ubuntu-xenial
-      username: {{docker-username}}
-      password: {{docker-password}}
-
-  - name: docker.bcf-stemcell-ubuntu-trusty
-    type: docker-image
-    source:
-      repository: bluebosh/bcf-stemcell-ubuntu-trusty
       username: {{docker-username}}
       password: {{docker-password}}
 
@@ -177,22 +97,6 @@ resources:
     source:
       uri: https://github.com/bluebosh/fissile-stemcell-ubuntu.git
       branch: bcf
-
-  - name: s3.bcf-base-image-ubuntu-trusty-version
-    type: s3
-    source:
-      bucket: bcf-stemcell-ubuntu
-      versioned_file: bcf-base-image-ubuntu-trusty-version
-      access_key_id: {{aws-access-key}}
-      secret_access_key: {{aws-secret-key}}
-
-  - name: s3.bcf-stemcell-ubuntu-trusty-version
-    type: s3
-    source:
-      bucket: bcf-stemcell-ubuntu
-      versioned_file: bcf-stemcell-ubuntu-trusty-version
-      access_key_id: {{aws-access-key}}
-      secret_access_key: {{aws-secret-key}}
 
   - name: s3.bcf-base-image-ubuntu-xenial-version
     type: s3
