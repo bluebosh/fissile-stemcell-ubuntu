@@ -18,6 +18,9 @@ RUN /bin/bash -c "source /usr/local/rvm/scripts/rvm && gem install configgin ${C
 # Install Python.
 RUN apt-get update && apt-get install -y python python-dev python-pip python-virtualenv libxml2-utils
 
+# Uninstall openssl client and server
+RUN apt-get --purge remove -y openssh-client openssh-server
+
 # Configure logrotate
 RUN /bin/bash -c "mv /etc/cron.daily/logrotate /usr/bin/logrotate-cron && echo '0,15,30,45 * * * * root /usr/bin/logrotate-cron' > /etc/cron.d/logrotate"
 
