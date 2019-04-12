@@ -33,5 +33,5 @@ RUN chmod ug+x /opt/fissile/post-start.sh
 ADD rsyslog_conf/etc /etc/
 
 # Generate stemcell version file /etc/stemcell_version
-ARG UBUNTU_VER
-RUN curl -L "https://bcf-stemcell-ubuntu.s3.amazonaws.com/bcf-stemcell-ubuntu-${UBUNTU_VER}-version" -o /etc/stemcell_version
+ARG STEMCELL_VER_URL
+RUN curl -L "${STEMCELL_VER_URL}" -o /etc/stemcell_version
