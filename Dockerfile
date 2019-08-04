@@ -16,7 +16,7 @@ ARG CONFIGGIN_VER=0.18.4
 RUN /bin/bash -c "source /usr/local/rvm/scripts/rvm && gem install configgin ${CONFIGGIN_VER:+--version=${CONFIGGIN_VER}}"
 
 # Install Python.
-RUN apt-get update && apt-get install -y python python-dev python-pip python-virtualenv libxml2-utils jq
+RUN apt-get update && apt-get install -y python python-dev python-pip python-virtualenv libxml2-utils jq fuse
 
 # Uninstall openssl client and server
 RUN apt-get --purge remove -y openssh-client openssh-server
