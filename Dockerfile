@@ -1,6 +1,9 @@
-FROM bluebosh/bcf-base-image-rhel-7:v1
+ARG BASE_IMAGE
+FROM ${BASE_IMAGE}
 
-RUN subscription-manager register --username xxxx --password xxxxx
+ARG RHN_USERNAME
+ARG RHN_PASSWORD
+RUN subscription-manager register --username $RHN_USERNAME --password $RHN_PASSWORD
 RUN subscription-manager attach --auto
 RUN rpm --rebuilddb; yum install -y yum-plugin-ovl
 
@@ -15,7 +18,7 @@ RUN /bin/bash -c "source /usr/local/rvm/scripts/rvm && gem install configgin -v 
 
 # RUN yum install -y https://centos7.iuscommunity.org/ius-release.rpm
 RUN yum update
-RUN yum install -y python36u python36u-libs python36u-devel python36u-pip perl-Pod-Checker libstdc++-4.8.5-39.el7.i686
+RUN yum install -y python36.x86_64 python36-devel.x86_64 perl-Pod-Checker
 
 RUN yum erase -y openssh.x86_64
 
@@ -33,3 +36,5 @@ ADD rsyslog_conf/etc /etc/
 
 RUN ln -sf /usr/sbin/crond /usr/sbin/cron
 RUN ln -sf /usr/lib64/libstdc++.so.6.0.19 /usr/lib64/libstdc++.so
+
+ADD assets/libstdc++.a /usr/lib/gcc/x86_64-redhat-linux/4.8.2/
