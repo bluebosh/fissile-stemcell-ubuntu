@@ -18,7 +18,7 @@ RUN /bin/bash -c "source /usr/local/rvm/scripts/rvm && gem install configgin -v 
 
 # RUN yum install -y https://centos7.iuscommunity.org/ius-release.rpm
 RUN yum update
-RUN yum install -y python36.x86_64 python36-devel.x86_64 perl-Pod-Checker
+RUN yum install -y python36.x86_64 perl-Pod-Checker jq.x86_64
 
 RUN yum erase -y openssh.x86_64
 
