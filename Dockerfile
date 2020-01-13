@@ -12,7 +12,7 @@ ARG DUMB_INIT_VER=1.2.1
 RUN curl -L "https://github.com/Yelp/dumb-init/releases/download/v${DUMB_INIT_VER}/dumb-init_${DUMB_INIT_VER}_amd64" -o /usr/bin/dumb-init && chmod a+x /usr/bin/dumb-init
 
 # Install configgin
-ARG CONFIGGIN_VER=0.19.0
+ARG CONFIGGIN_VER=0.20.0
 RUN /bin/bash -c "source /usr/local/rvm/scripts/rvm && gem install configgin ${CONFIGGIN_VER:+--version=${CONFIGGIN_VER}}"
 
 # Install tools and libraries, as well as removing unwanted software
